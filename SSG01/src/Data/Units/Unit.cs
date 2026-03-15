@@ -3,7 +3,7 @@
     using SSG01.Core;
     using System;
 
-	public class BaseUnit
+	public class Unit
 	{
 		private int positionX = 0;
 		private int positionY = 0;
@@ -14,7 +14,7 @@
 		public String team = "UNKNOWN";
 		public bool playable = false;
 
-		public BaseUnit(Game game, int startPositionX, int startPositionY, string team, bool playable)    //引数:現在のマップインスタンス, 初期位置, 所属チーム, プレイアブル
+		public Unit(Game game, int startPositionX, int startPositionY, string team, bool playable)    //引数:現在のマップインスタンス, 初期位置, 所属チーム, プレイアブル
 		{
 			positionX = startPositionX;
 			positionY = startPositionY;

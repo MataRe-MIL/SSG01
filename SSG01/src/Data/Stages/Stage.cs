@@ -7,6 +7,8 @@
 		public int id = 0;
 		public string name = "";
 
+		public int[][] mapTiles;
+
 		public Stage(int id, string name)
 		{
 			this.id = id;

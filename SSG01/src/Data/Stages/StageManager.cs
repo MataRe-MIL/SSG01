@@ -8,7 +8,7 @@
 
         public StageManager()
         {
-            stages.Add(new Stage1(0, "Area S09 ～End Field～"));
+            stages.Add(new Stage1(1, "Area S09 ～End Field～"));
         }
     }
 }

@@ -11,22 +11,22 @@
 		 * 1:Operation
 		 */
 		public int gamePhase = 0;		//ゲームフェーズ
-		public int nowStageID = 0;			//現在実行中のステージID
-
-        public int[][] nowMapTiles;
+		public Data.Stages.Stage nowStage;			//現在実行中のステージ
 
 		public Game()
 		{
 			UI.Menu menuRenderer = new UI.Menu();		//メニューレンダラーの起動
             Data.Stages.StageManager stageManager = new Data.Stages.StageManager();		//ステージマネージャーの起動
-			UI.MapRenderer mapRenderer = new UI.MapRenderer(nowMapTiles);		//マップレンダラーの起動
+
+            nowStage = menuRenderer.StartMenu(stageManager);
+			gamePhase = 1;
 
 
-            menuRenderer.StartMenu(stageManager);
-		}
+			Operation operation = new Operation(nowStage);		//オペレーション・システムの起動
+        }
 
 
-        public bool CheckMapTile(int x, int y, int target)
+        public bool CheckMapTile(int[][] nowMapTiles, int x, int y, int target)
         {
             bool result = false;
 

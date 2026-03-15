@@ -1,22 +1,20 @@
 ﻿namespace SSG01.UI
 {
 	using System;
-    using System.Runtime.CompilerServices;
 
     public class Menu
 	{
 		private string input;
 
 
-		public int StartMenu(Data.Stages.StageManager stageManager)
+		public Data.Stages.Stage StartMenu(Data.Stages.StageManager stageManager)
 		{
 			int selectedStage = 0;
 
 
 			while (true)
 			{
-				Console.Clear();
-				Console.ResetColor();
+				Core.Utilities.ConsoleClear();
 
 				Console.WriteLine("============================");
 				Console.WriteLine("||戦役を選択してください。||");
@@ -35,7 +33,8 @@
 				{
 					if (stageManager.stages[i].id == selectedStage)
 					{
-						return selectedStage;
+						Core.Utilities.ConsoleClear();
+						return stageManager.stages[i];
 					}
 				}
 			}
