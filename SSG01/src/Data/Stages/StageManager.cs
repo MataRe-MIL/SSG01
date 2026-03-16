@@ -6,9 +6,9 @@
 	{
         public List<Data.Stages.Stage> stages = new List<Data.Stages.Stage>();		//ステージのリスト
 
-        public StageManager()
+        public StageManager(Core.Operation operation)
         {
-            stages.Add(new Stage1(1, "Area S09 ～End Field～"));
+            stages.Add(new Stage1(operation, 1, "Area S09 ～End Field～"));
         }
     }
 }

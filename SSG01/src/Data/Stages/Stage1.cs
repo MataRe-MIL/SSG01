@@ -6,7 +6,7 @@
 	{
 		public readonly string stageName = "Area S09 ～End Field～";
 
-		public Stage1(int id, string name) : base(id, name)
+		public Stage1(Core.Operation operation, int id, string name) : base(id, name)
 		{
 			this.mapTiles = new int[][]
 				{
