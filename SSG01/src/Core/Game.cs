@@ -15,28 +15,16 @@
 
 		public Game()
 		{
-			UI.Menu menuRenderer = new UI.Menu();		//メニューレンダラーの起動
+			Core.Utilities util = new Core.Utilities();     //ユーティリティの起動
+            UI.Menu menuRenderer = new UI.Menu(util);       //メニューレンダラーの起動
+			Core.Operation operation = new Operation();		//オペレーション・システムの起動
             Data.Stages.StageManager stageManager = new Data.Stages.StageManager();		//ステージマネージャーの起動
 
             nowStage = menuRenderer.StartMenu(stageManager);
 			gamePhase = 1;
 
 
-			Operation operation = new Operation(nowStage);		//オペレーション・システムの起動
+			operation.StartOperation(nowStage);
         }
-
-
-        public bool CheckMapTile(int[][] nowMapTiles, int x, int y, int target)
-        {
-            bool result = false;
-
-            if (x < 0 || y < 0 || x >= nowMapTiles.Length || y >= nowMapTiles[x].Length || nowMapTiles[x][y] != target) result = false;
-            else if (nowMapTiles[x][y] == target) result = true;
-            else result = false;
-
-            return result;
-        }
-
-
     }
 }

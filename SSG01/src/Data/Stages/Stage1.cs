@@ -19,9 +19,12 @@
 					new int[]{0,1,1,1,1,1,1,1,0}
 				};
 
-			List<Data.Units.Unit> units = new List<Units.Unit>()
+			List<Units.Unit>[] setUnits = new List<Units.Unit>[]
 			{
-
+				new List<Units.Unit>
+				{
+					new Units.Unit(operation,1,1,"PMC",true)
+				}
 			};
 		}
 	}

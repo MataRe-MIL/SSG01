@@ -4,16 +4,13 @@
 
     public class MapRenderer
 	{
-		private int[][] mapTiles;
+		 private int[][] mapTiles;
 
-		public MapRenderer(int[][] MapTiles)
+		public void DrawMap(int[][] mapTiles)
 		{
-			mapTiles = MapTiles;
-		}
+			this.mapTiles = mapTiles;
 
-		public void DrawMap()
-		{
-			for(int i = 0; i < mapTiles.Length; ++i)
+            for (int i = 0; i < mapTiles.Length; ++i)
 			{
 				for(int j = 0; j < mapTiles[i].Length; ++j)
 				{
@@ -28,7 +25,8 @@
 						case 1:
 							{
 								Console.BackgroundColor = ConsoleColor.Yellow;		//文字背景色を黄色に
-								Console.ForegroundColor = ConsoleColor.Black;		//文字色を黒色に
+								Console.ForegroundColor = ConsoleColor.Black;       //文字色を黒色に
+								Console.Write(" ");
 								Console.ResetColor();
 								break;
 							}

@@ -4,13 +4,27 @@
 
 	public class Operation
 	{
-		UI.MapRenderer mapRenderer;		//マップレンダラー
-		Data.Stages.Stage stage;		//現在のステージデータ
+		UI.MapRenderer mapRenderer = new UI.MapRenderer();      //マップレンダラー起動
+		Data.Stages.Stage stage;        //現在のステージデータ
 
-		public Operation(Data.Stages.Stage nowStage)
+
+		public void StartOperation(Data.Stages.Stage nowStage)
 		{
 			stage = nowStage;
-			mapRenderer = new UI.MapRenderer(stage.mapTiles);		//マップレンダラー起動
-        }
-    }
+
+			mapRenderer.DrawMap(stage.mapTiles);        //マップの描画
+
+		}
+
+		public bool CheckMapTile(int x, int y, int target)
+		{
+			bool result = false;
+
+			if (x < 0 || y < 0 || x >= stage.mapTiles.Length || y >= stage.mapTiles[x].Length || stage.mapTiles[x][y] != target) result = false;
+			else if (stage.mapTiles[x][y] == target) result = true;
+			else result = false;
+
+			return result;
+		}
+	}
 }

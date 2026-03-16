@@ -6,9 +6,9 @@ namespace SSG01
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Start Game Loading");
+            Console.WriteLine("Start Loading Game");
 
-            Core.Game game = new Core.Game();
+            Core.Game game = new Core.Game();       //メインゲームインスタンスを起動
 
             /*
             int[][] mapTiles =

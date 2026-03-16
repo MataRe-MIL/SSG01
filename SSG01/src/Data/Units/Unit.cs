@@ -8,18 +8,18 @@
 		private int positionX = 0;
 		private int positionY = 0;
 
-		private Game game;		//現在のマップインスタンスをロード
+		private Core.Operation operation;		//現在のマップインスタンスをロード
 
 
 		public String team = "UNKNOWN";
 		public bool playable = false;
 
-		public Unit(Game game, int startPositionX, int startPositionY, string team, bool playable)    //引数:現在のマップインスタンス, 初期位置, 所属チーム, プレイアブル
+		public Unit(Core.Operation operation, int startPositionX, int startPositionY, string team, bool playable)    //引数:オペレーション・システムインスタンス, 初期位置, 所属チーム, プレイアブル
 		{
 			positionX = startPositionX;
 			positionY = startPositionY;
 
-			this.game = game;
+			this.operation = operation;
 
 			switch (team)
 			{
@@ -39,22 +39,22 @@
 			{
 				case 'f':
 					{
-						if (game.CheckMapTile((positionX - 1), positionY, 1) == true) --positionX;
+						if (operation.CheckMapTile((positionX - 1), positionY, 1) == true) --positionX;
 						break;
 					}
 				case 'b':
 					{
-						if (game.CheckMapTile((positionX + 1), positionY, 1) == true) ++positionX;
+						if (operation.CheckMapTile((positionX + 1), positionY, 1) == true) ++positionX;
 						break;
 					}
 				case 'r':
 					{
-						if(game.CheckMapTile(positionX, (positionY + 1), 1) == true) ++positionY;
+						if(operation.CheckMapTile(positionX, (positionY + 1), 1) == true) ++positionY;
 						break;
 					}
 				case 'l':
 					{
-						if (game.CheckMapTile(positionX, (positionY - 1), 1) == true) --positionY;
+						if (operation.CheckMapTile(positionX, (positionY - 1), 1) == true) --positionY;
 						break;
 					}
 			}

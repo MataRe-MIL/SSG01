@@ -8,6 +8,7 @@
 		public string name = "";
 
 		public int[][] mapTiles;
+		public Core.Operation operation;
 
 		public Stage(int id, string name)
 		{

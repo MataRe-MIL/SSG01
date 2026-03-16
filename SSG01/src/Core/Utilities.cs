@@ -2,9 +2,9 @@
 {
 	using System;
 
-	public static class Utilities
+	public class Utilities
 	{
-		public static void ConsoleClear()
+		public void ConsoleClear()
 		{
 			Console.Clear();
 			Console.ResetColor();
