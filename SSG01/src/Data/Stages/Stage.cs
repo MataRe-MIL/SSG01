@@ -7,10 +7,12 @@
 		public int id = 0;
 		public string name = "";
 
-		public int[][] mapTiles;
-		public Core.Operation operation;
+        public Core.Operation operation;
+        public int[][] mapTiles;
+		public List<Units.Unit>[] setUnits;
 
-		public Stage(int id, string name)
+
+        public Stage(int id, string name)
 		{
 			this.id = id;
 			this.name = name;

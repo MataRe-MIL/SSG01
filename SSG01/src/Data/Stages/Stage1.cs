@@ -10,16 +10,16 @@
 		{
 			this.mapTiles = new int[][]
 				{
-					new int[]{0,0,0,0,0,0,0,0,0},
+					new int[]{0,1,0,0,0,0,0,0,0},
 					new int[]{0,1,1,1,1,1,1,1,0},
 					new int[]{0,1,1,1,1,1,1,1,0},
-					new int[]{0,1,0,0,0,0,0,1,0},
-					new int[]{0,1,1,1,1,1,1,1,0},
-					new int[]{0,1,1,1,1,1,1,1,0},
-					new int[]{0,1,1,1,1,1,1,1,0}
+					new int[]{0,1,0,0,1,0,0,1,1},
+					new int[]{0,1,1,1,1,1,1,1,1},
+					new int[]{0,1,1,1,0,1,1,1,0},
+					new int[]{0,1,1,1,0,1,1,1,0}
 				};
 
-			List<Units.Unit>[] setUnits = new List<Units.Unit>[]
+			this.setUnits = new List<Units.Unit>[]
 			{
 				new List<Units.Unit>
 				{

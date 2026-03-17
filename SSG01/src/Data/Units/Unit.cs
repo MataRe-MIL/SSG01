@@ -5,8 +5,8 @@
 
 	public class Unit
 	{
-		private int positionX = 0;
-		private int positionY = 0;
+		public int x = 0;
+		public int y = 0;
 
 		private Core.Operation operation;		//現在のマップインスタンスをロード
 
@@ -16,8 +16,8 @@
 
 		public Unit(Core.Operation operation, int startPositionX, int startPositionY, string team, bool playable)    //引数:オペレーション・システムインスタンス, 初期位置, 所属チーム, プレイアブル
 		{
-			positionX = startPositionX;
-			positionY = startPositionY;
+			x = startPositionX;
+			y = startPositionY;
 
 			this.operation = operation;
 
@@ -39,22 +39,22 @@
 			{
 				case 'f':
 					{
-						if (operation.CheckMapTile((positionX - 1), positionY, 1) == true) --positionX;
+						if (operation.CheckMapTile((x - 1), y, 1) == true) --x;
 						break;
 					}
 				case 'b':
 					{
-						if (operation.CheckMapTile((positionX + 1), positionY, 1) == true) ++positionX;
+						if (operation.CheckMapTile((x + 1), y, 1) == true) ++x;
 						break;
 					}
 				case 'r':
 					{
-						if(operation.CheckMapTile(positionX, (positionY + 1), 1) == true) ++positionY;
+						if(operation.CheckMapTile(x, (y + 1), 1) == true) ++y;
 						break;
 					}
 				case 'l':
 					{
-						if (operation.CheckMapTile(positionX, (positionY - 1), 1) == true) --positionY;
+						if (operation.CheckMapTile(x, (y - 1), 1) == true) --y;
 						break;
 					}
 			}
