@@ -5,13 +5,14 @@
 
 	public class Unit
 	{
-		public int x = 0;
+        private Core.Operation operation;       //現在のマップインスタンスをロード
+
+
+        public int x = 0;
 		public int y = 0;
 
-		private Core.Operation operation;		//現在のマップインスタンスをロード
-
-
-		public String team = "UNKNOWN";
+		public char symbol = 'U';		//ユニットのシンボル
+        public String team = "UNKNOWN";		//ユニットの所属チーム
 		public bool playable = false;
 
 		public Unit(Core.Operation operation, int startPositionX, int startPositionY, string team, bool playable)    //引数:オペレーション・システムインスタンス, 初期位置, 所属チーム, プレイアブル

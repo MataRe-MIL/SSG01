@@ -12,7 +12,7 @@
 		{
 			stage = nowStage;
 
-			mapRenderer.DrawMap(stage.mapTiles);        //マップの描画
+			mapRenderer.DrawMap(stage.mapTiles, stage.setUnits);        //マップの描画
 
 		}
 

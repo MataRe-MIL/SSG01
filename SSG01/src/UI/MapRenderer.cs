@@ -20,32 +20,20 @@
 							{
 								Console.ResetColor();       //色を初期状態に
 
-								if (units != null)
-								{
-									for (int i1 = 0; i1 < units.Length; ++i1)
-									{
-										for (int j1 = 0; j < units[i1].Count; ++j1)
-										{
-											if (units[i1][j1].x == i && units[i1][j1].y == j)
-											{
-												Console.Write("U");
-												goto EndLoop;
-											}
-										}
-									}
-								}
+								if(units != null)
+									UnitRenderer(units,i,j);
 								else
-								{
 									Console.Write(" ");
-								}
-							EndLoop:
 								break;
 							}
 						case 1:
 							{
 								Console.BackgroundColor = ConsoleColor.Yellow;		//文字背景色を黄色に
 								Console.ForegroundColor = ConsoleColor.Black;       //文字色を黒色に
-								Console.Write(" ");
+								if (units != null)
+									UnitRenderer(units, i, j);
+								else
+									Console.Write(" ");
 								Console.ResetColor();
 								break;
 							}
@@ -54,6 +42,23 @@
 				}
 				Console.WriteLine();
 			}
+		}
+
+		public void UnitRenderer(List<Data.Units.Unit>[] units, int checkX, int checkY)
+		{
+			for (int i = 0; i < units.Length; ++i)
+			{
+                for (int j = 0; j < units[i].Count; j++)
+                {
+					if (units[i][j].x == checkX && units[i][j].y == checkY)
+					{
+						Console.Write(units[i][j].symbol);
+						goto EndLoop;
+					}
+                }
+            }
+			Console.Write(" ");
+			EndLoop:;
 		}
 	}
 }
