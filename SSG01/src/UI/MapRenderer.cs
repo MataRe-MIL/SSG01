@@ -28,7 +28,7 @@
 							}
 						case 1:
 							{
-								Console.BackgroundColor = ConsoleColor.Yellow;		//文字背景色を黄色に
+								Console.BackgroundColor = ConsoleColor.White;		//文字背景色を黄色に
 								Console.ForegroundColor = ConsoleColor.Black;       //文字色を黒色に
 								if (units != null)
 									UnitRenderer(units, i, j);
@@ -52,7 +52,7 @@
                 {
 					if (units[i][j].x == checkX && units[i][j].y == checkY)
 					{
-						Console.Write(units[i][j].symbol);
+						units[i][j].SymbolRendering(j);
 						goto EndLoop;
 					}
                 }

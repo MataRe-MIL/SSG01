@@ -2,8 +2,9 @@
 {
     using SSG01.Core;
     using System;
+    using System.Diagnostics.SymbolStore;
 
-	public class Unit
+    public class Unit
 	{
         private Core.Operation operation;       //現在のマップインスタンスをロード
 
@@ -11,24 +12,42 @@
         public int x = 0;
 		public int y = 0;
 
-		public char symbol = 'U';		//ユニットのシンボル
-        public String team = "UNKNOWN";		//ユニットの所属チーム
-		public bool playable = false;
+		public char symbol = 'U';
+		public bool playable;       //プレイヤーが操作可能なユニットかどうか
+        public string unitName;     //ユニットの名前
+		public int team;		//0：プレイヤー陣営、1：敵陣営
 
-		public Unit(Core.Operation operation, int startPositionX, int startPositionY, string team, bool playable)    //引数:オペレーション・システムインスタンス, 初期位置, 所属チーム, プレイアブル
+        public Unit(Core.Operation operation, int startPositionX, int startPositionY, int team, bool playable = false,  string unitName = "")
 		{
 			x = startPositionX;
 			y = startPositionY;
 
 			this.operation = operation;
-
-			switch (team)
-			{
-				case "": break;
-				default: this.team = team; break;
-			}
-
+			this.team = team;
 			this.playable = playable;
+			this.unitName = unitName;
+        }
+
+		public void SymbolRendering(int unitNum)
+		{
+			if(team == 0)
+			{
+				Console.BackgroundColor = ConsoleColor.Green;
+				Console.ForegroundColor = ConsoleColor.Black;
+
+				Console.Write((UnitSymbols)unitNum);
+
+				Console.ResetColor();
+            }
+			else if(team == 1)
+			{
+				Console.BackgroundColor = ConsoleColor.Red;
+				Console.ForegroundColor = ConsoleColor.White;
+
+				Console.Write((UnitSymbols)unitNum);
+
+				Console.ResetColor();
+            }
 		}
 
 
