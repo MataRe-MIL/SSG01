@@ -7,6 +7,7 @@
     public class Unit
 	{
         private Core.Operation operation;       //現在のマップインスタンスをロード
+		private static System.Random rand = new System.Random();		//乱数生成インスタンスをロード
 
 
         public int x = 0;
@@ -15,7 +16,9 @@
 		public char symbol = 'U';
 		public bool playable;       //プレイヤーが操作可能なユニットかどうか
         public string unitName;     //ユニットの名前
-		public int team;		//0：プレイヤー陣営、1：敵陣営
+		public int team;        //0：プレイヤー陣営、1：敵陣営
+
+		public int mobility = 3;		//ユニットの移動力
 
         public Unit(Core.Operation operation, int startPositionX, int startPositionY, int team, bool playable = false,  string unitName = "")
 		{
@@ -28,6 +31,8 @@
 			this.unitName = unitName;
         }
 
+
+		//マップ上シンボルの描画
 		public void SymbolRendering(int unitNum)
 		{
 			if(team == 0)
@@ -35,7 +40,7 @@
 				Console.BackgroundColor = ConsoleColor.Green;
 				Console.ForegroundColor = ConsoleColor.Black;
 
-				Console.Write((UnitSymbols)unitNum);
+                Console.Write((Data.Enums.UnitSymbols)unitNum);
 
 				Console.ResetColor();
             }
@@ -44,35 +49,47 @@
 				Console.BackgroundColor = ConsoleColor.Red;
 				Console.ForegroundColor = ConsoleColor.White;
 
-				Console.Write((UnitSymbols)unitNum);
+                Console.Write((Data.Enums.UnitSymbols)unitNum);
 
 				Console.ResetColor();
             }
 		}
 
 
-		//UnitAction
+		//unplayableユニットの自律行動アルゴリズム
+		public void AI()
+		{
 
-		public void Move(char direction)
+		}
+
+		//ユニットの行動決定乱数を出力
+		public int ActionRandom()
+		{
+            int actionRandom = rand.Next(0, mobility);
+			return actionRandom;
+        }
+
+        //ユニットの移動処理
+        public void Move(Data.Enums.Direction direction)
 		{
 			switch(direction)
 			{
-				case 'f':
+				case Enums.Direction.forward:
 					{
 						if (operation.CheckMapTile((x - 1), y, 1) == true) --x;
 						break;
 					}
-				case 'b':
+				case Enums.Direction.backward:
 					{
 						if (operation.CheckMapTile((x + 1), y, 1) == true) ++x;
 						break;
 					}
-				case 'r':
+				case Enums.Direction.right:
 					{
 						if(operation.CheckMapTile(x, (y + 1), 1) == true) ++y;
 						break;
 					}
-				case 'l':
+				case Enums.Direction.left:
 					{
 						if (operation.CheckMapTile(x, (y - 1), 1) == true) --y;
 						break;

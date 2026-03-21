@@ -6,7 +6,8 @@ namespace SSG01
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Start Loading Game");
+            Console.WriteLine("Loading Game");
+
 
             Core.Game game = new Core.Game();       //メインゲームインスタンスを起動
 
