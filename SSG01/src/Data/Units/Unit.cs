@@ -7,18 +7,23 @@
     public class Unit
 	{
         private Core.Operation operation;       //現在のマップインスタンスをロード
-		private static System.Random rand = new System.Random();		//乱数生成インスタンスをロード
+		private static System.Random rand = new System.Random();        //乱数生成インスタンスをロード
 
-
-        public int x = 0;
-		public int y = 0;
-
-		public char symbol = 'U';
-		public bool playable;       //プレイヤーが操作可能なユニットかどうか
+        //=====ユニットの基本情報=====
+        public bool playable;       //プレイヤーが操作可能なユニットかどうか
         public string unitName;     //ユニットの名前
 		public int team;        //0：プレイヤー陣営、1：敵陣営
 
-		public int mobility = 3;		//ユニットの移動力
+		public int mobility = 3;        //ユニットの俊敏性
+
+		//=====ユニットの変数=====
+        public int x = 0;
+        public int y = 0;
+
+        public int actionRandomValue;		//行動順決定乱数の出力値
+        private int lastActionTurn = 0;     //前回移動したターン数
+        public int consecutiveMoveCount = 0;        //ユニットの連続移動回数
+
 
         public Unit(Core.Operation operation, int startPositionX, int startPositionY, int team, bool playable = false,  string unitName = "")
 		{
@@ -62,15 +67,14 @@
 
 		}
 
-		//ユニットの行動決定乱数を出力
-		public int ActionRandom()
+		//ユニットの行動順決定乱数生成
+		public void ActionRandom()
 		{
-            int actionRandom = rand.Next(0, mobility);
-			return actionRandom;
+            actionRandomValue = rand.Next(0, mobility);
         }
 
         //ユニットの移動処理
-        public void Move(Data.Enums.Direction direction)
+        public void Move(Data.Enums.Direction direction, int nowTurn)
 		{
 			switch(direction)
 			{
