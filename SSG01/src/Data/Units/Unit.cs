@@ -14,15 +14,14 @@
         public string unitName;     //ユニットの名前
 		public int team;        //0：プレイヤー陣営、1：敵陣営
 
-		public int mobility = 3;        //ユニットの俊敏性
+		public int mobility = 20;        //ユニットの俊敏性
 
 		//=====ユニットの変数=====
         public int x = 0;
         public int y = 0;
 
         public int actionRandomValue;		//行動順決定乱数の出力値
-        private int lastActionTurn = 0;     //前回移動したターン数
-        public int consecutiveMoveCount = 0;        //ユニットの連続移動回数
+		public int symbolNum;		//画面上のユニット識別記号番号
 
 
         public Unit(Core.Operation operation, int startPositionX, int startPositionY, int team, bool playable = false,  string unitName = "")
@@ -38,9 +37,14 @@
 
 
 		//マップ上シンボルの描画
-		public void SymbolRendering(int unitNum)
+		public void SymbolRendering(int unitNum = 52)
 		{
-			if(team == 0)
+			if (unitNum < 52)
+				symbolNum = unitNum;
+			else if (unitNum == 52)
+				unitNum = symbolNum;
+
+            if (team == 0)
 			{
 				Console.BackgroundColor = ConsoleColor.Green;
 				Console.ForegroundColor = ConsoleColor.Black;
@@ -73,8 +77,12 @@
             actionRandomValue = rand.Next(0, mobility);
         }
 
-        //ユニットの移動処理
-        public void Move(Data.Enums.Direction direction, int nowTurn)
+        //<summary>
+        //ユニットの移動処理関数。
+        //移動方向に応じて、マップ上の移動先タイルが移動可能かどうかを判定し、移動可能な場合はユニットの座標を更新する。
+        //direction...移動方向、nowTurn...現在のターン数
+        //</summary>
+        public void Move(Data.Enums.Direction direction)
 		{
 			switch(direction)
 			{

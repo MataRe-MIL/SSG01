@@ -23,8 +23,8 @@
 			{
 				new List<Units.Unit>
 				{
-					new Units.Unit(operation,1,1,0,false,"捜査小隊"),		//operationインスタンス,開始位置x,開始位置y,敵味方(0 or 1),プレイアブルかどうか,ユニット名
-                    new Units.Unit(operation,3,1,1,false,"捜査小隊"),
+					new Units.Unit(operation,1,1,0,true,"捜査小隊"),		//operationインスタンス,開始位置x,開始位置y,敵味方(0 or 1),プレイアブルかどうか,ユニット名
+                    new Units.Unit(operation,3,1,1,true,"捜査小隊"),
 
                 }
             };
