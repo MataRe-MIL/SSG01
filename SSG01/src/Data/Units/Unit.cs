@@ -81,31 +81,47 @@
         //移動方向に応じて、マップ上の移動先タイルが移動可能かどうかを判定し、移動可能な場合はユニットの座標を更新する。
         //direction...移動方向、nowTurn...現在のターン数
         //</summary>
-        public void Move(Data.Enums.Direction direction)
+        public bool Move(Data.Enums.Direction direction)
 		{
-			switch(direction)
+			bool success = true;
+
+            switch (direction)
 			{
 				case Enums.Direction.forward:
 					{
-						if (operation.CheckMapTile((x - 1), y, 1) == true) --x;
-						break;
+						if(operation.CheckMapTile((x - 1), y)[0] == 1 && operation.CheckMapTile((x - 1), y)[1] == 0)
+							--x;
+						else
+							success = false;
+                        break;
 					}
 				case Enums.Direction.backward:
 					{
-						if (operation.CheckMapTile((x + 1), y, 1) == true) ++x;
-						break;
+						if(operation.CheckMapTile((x + 1), y)[0] == 1 && operation.CheckMapTile((x + 1), y)[1] == 0)
+							++x;
+						else
+							success = false;
+                        break;
 					}
 				case Enums.Direction.right:
 					{
-						if(operation.CheckMapTile(x, (y + 1), 1) == true) ++y;
-						break;
+						if(operation.CheckMapTile(x, (y + 1))[0] == 1 && operation.CheckMapTile(x, (y + 1))[1] == 0)
+							++y;
+						else
+							success = false;
+                        break;
 					}
 				case Enums.Direction.left:
 					{
-						if (operation.CheckMapTile(x, (y - 1), 1) == true) --y;
-						break;
+						if(operation.CheckMapTile(x, (y - 1))[0] == 1 && operation.CheckMapTile(x, (y - 1))[1] == 0)
+							--y;
+						else
+							success = false;
+                        break;
 					}
 			}
+
+			return success;
 		}
 	}
 }

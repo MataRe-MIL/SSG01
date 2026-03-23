@@ -44,6 +44,7 @@
         public void UnitAction()
         {
             bool endActionSelect = false;        //行動選択終了フラグ
+            bool moveSelect = false;        //移動選択フラグ
 
             for (int i = 0; i < actionOrder.Count; ++i)
             {
@@ -63,7 +64,8 @@
                                 }
                             case Data.Enums.ActionType.Move:
                                 {
-                                    actionOrder[i].Move((Data.Enums.Direction)menu.UnitMoveMenu());
+                                    while (moveSelect == false)
+                                        moveSelect = actionOrder[i].Move((Data.Enums.Direction)menu.UnitMoveMenu());
                                     endActionSelect = true;
                                     break;
                                 }
@@ -100,15 +102,26 @@
         //<summary>
         //あるひとつのマップタイルが特定の値であるかを確認する関数。
         //マップタイルが特定の値であればtrue、そうでなければfalseを返す。
-        //x...マップタイルのx座標、y...マップタイルのy座標、target...特定の値
+        //x...マップタイルのx座標、y...マップタイルのy座標
         //</summary>
-        public bool CheckMapTile(int x, int y, int target)
+        public int[] CheckMapTile(int x, int y)
         {
-            bool result = false;
+            int[] result = new int[2];      //{通行の可否(0,1), ユニットが存在するかどうか(0,1)}
 
-            if (x < 0 || y < 0 || x >= stage.mapTiles.Length || y >= stage.mapTiles[x].Length || stage.mapTiles[x][y] != target) result = false;
-            else if (stage.mapTiles[x][y] == target) result = true;
-            else result = false;
+            result[0] = stage.mapTiles[x][y];
+            result[1] = 0;
+            for (int i = 0; i < stage.setUnits.Length; ++i)
+            {
+                for (int j = 0; j < stage.setUnits[i].Count; ++j)
+                {
+                    if (stage.setUnits[i][j].x == x && stage.setUnits[i][j].y == y)
+                    {
+                        result[1] = 1;
+                        goto EndTileCheckLoop;
+                    }
+                }
+            }
+            EndTileCheckLoop:
 
             return result;
         }
