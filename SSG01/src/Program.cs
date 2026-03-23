@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System;
 
 namespace SSG01
 {
@@ -10,21 +10,6 @@ namespace SSG01
 
 
             Core.Game game = new Core.Game();       //メインゲームインスタンスを起動
-
-            /*
-            int[][] mapTiles =
-            {
-                new int[]{0,0,0,0,0,0,0,0,0},
-                new int[]{0,1,1,1,1,1,1,1,0},
-                new int[]{0,1,1,1,1,1,1,1,0},
-                new int[]{0,1,0,0,0,0,0,1,0},
-                new int[]{0,1,1,1,1,1,1,1,0},
-                new int[]{0,1,1,1,1,1,1,1,0},
-                new int[]{0,1,1,1,1,1,1,1,0}
-            };
-            UI.MapRenderer map = new UI.MapRenderer(mapTiles);
-            map.DrawMap();
-            */
         }
     }
 }

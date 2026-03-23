@@ -4,12 +4,8 @@
 
     public class MapRenderer
 	{
-        private int[][] mapTiles;
-
 		public void DrawMap(int[][] mapTiles, List<Data.Units.Unit>[] units = null)
 		{
-			this.mapTiles = mapTiles;
-
             for (int i = 0; i < mapTiles.Length; ++i)
 			{
 				for(int j = 0; j < mapTiles[i].Length; ++j)

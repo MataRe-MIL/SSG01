@@ -8,12 +8,10 @@
         Core.Utilities util = new Core.Utilities();     //ユーティリティの起動
         UI.MapRenderer mapRenderer = new UI.MapRenderer();      //マップレンダラー起動
         UI.Menu menu;     //メニュー起動
-        Random rand = new Random();       //乱数生成インスタンスをロード
 
 
         Data.Stages.Stage stage;        //現在のステージデータ
         List<Data.Units.Unit> actionOrder = new List<Data.Units.Unit>();       //ユニット行動順リスト
-        Data.Units.Unit nowActionUnit;      //現在行動中のユニット
         int turnCount = 0;       //行動周回数
 
         public Operation(UI.Menu menu)
@@ -65,7 +63,7 @@
                                 }
                             case Data.Enums.ActionType.Move:
                                 {
-                                    actionOrder[i].Move((Data.Enums.Direction)menu.UnitMoveMenu(actionOrder[i]));
+                                    actionOrder[i].Move((Data.Enums.Direction)menu.UnitMoveMenu());
                                     endActionSelect = true;
                                     break;
                                 }

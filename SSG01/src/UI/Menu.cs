@@ -61,7 +61,7 @@
 			return selectedAction;
         }
 
-		public int UnitMoveMenu(Data.Units.Unit unit)
+		public int UnitMoveMenu()
 		{
 			int selectedDirection;
 

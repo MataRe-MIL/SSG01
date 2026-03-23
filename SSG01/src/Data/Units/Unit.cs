@@ -2,7 +2,6 @@
 {
     using SSG01.Core;
     using System;
-    using System.Diagnostics.SymbolStore;
 
     public class Unit
 	{

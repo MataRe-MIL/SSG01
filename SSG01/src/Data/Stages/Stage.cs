@@ -7,7 +7,6 @@
 		public int id = 0;
 		public string name = "";
 
-        public Core.Operation operation;
         public int[][] mapTiles;
 		public List<Units.Unit>[] setUnits;
 
