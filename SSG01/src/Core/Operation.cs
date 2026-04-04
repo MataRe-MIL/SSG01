@@ -105,8 +105,9 @@
 
         //<summary>
         //あるひとつのマップタイルが特定の値であるかを確認する関数。
-        //マップタイルが特定の値であればtrue、そうでなければfalseを返す。
+        //マップタイルが特定の値であれば1、そうでなければ1を返す。
         //x...マップタイルのx座標、y...マップタイルのy座標
+        //返り値...{通行の可否(0,1), ユニットが存在するかどうか(0,1)}
         //</summary>
         public int[] CheckMapTile(int x, int y)
         {
@@ -128,6 +129,32 @@
             EndTileCheckLoop:
 
             return result;
+        }
+
+        //<summary>
+        //ある座標を中心として指定した距離（マンハッタン距離）内のマップタイルの状態を確認する関数。
+        //なお探索中心座標に指定されたマップタイルは探索対象から除外される。
+        //x...探索中心のx座標、y...探索中心のy座標、distance...探索する距離
+        //</summary>
+        public List<int[]> CheckMapTiles(int x, int y, int distance)
+        {
+            List<int[]> resultList = new List<int[]>();     //探索結果保存リスト
+            
+            for(int i = x - distance; i <= x + distance; ++i)
+            {
+                int remaining = distance - Math.Abs(i);     //探索中心からの距離を基に、探索するy座標の範囲を決定する
+
+                for(int j = y - remaining; j <= y + remaining; ++j)
+                {
+                    if(i >= 0 && j >= 0 && i < stage.mapTiles.Length && j < stage.mapTiles[i].Length && i != x && j != y)       //マップタイルの範囲内で、探索中心座標以外のマップタイルを探索する
+                    {
+                        if (CheckMapTile(i, j)[1] == 1)
+                            resultList.Add(new int[] { i, j });
+                    }
+                }
+            }
+
+            return resultList;
         }
     }
 }

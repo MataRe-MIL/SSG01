@@ -19,29 +19,31 @@
 			int selectedStage = 0;
 
 
+			util.ConsoleClear();
+
+			Console.WriteLine("============================");
+			Console.WriteLine("||戦役を選択してください。||");
+			Console.WriteLine("============================\n");
+
+			for (int i = 0; i < stageManager.stages.Count; ++i)
+			{
+				Console.WriteLine(stageManager.stages[i].id + ". " + stageManager.stages[i].name);
+			}
+
 			while (true)
 			{
-				util.ConsoleClear();
-
-				Console.WriteLine("============================");
-				Console.WriteLine("||戦役を選択してください。||");
-				Console.WriteLine("============================\n");
-
-				for (int i = 0; i < stageManager.stages.Count; ++i)
-				{
-					Console.WriteLine(stageManager.stages[i].id + ". " + stageManager.stages[i].name);
-				}
 				Console.Write("\n>> ");
-
 				input = Console.ReadLine();
-				selectedStage = int.Parse(input);
 
-				for (int i = 0; i < stageManager.stages.Count; ++i)
+				if (int.TryParse(input, out selectedStage))
 				{
-					if (stageManager.stages[i].id == selectedStage)
+					for (int i = 0; i < stageManager.stages.Count; ++i)
 					{
-						util.ConsoleClear();
-						return stageManager.stages[i];
+						if (stageManager.stages[i].id == selectedStage)
+						{
+							util.ConsoleClear();
+							return stageManager.stages[i];
+						}
 					}
 				}
 			}
@@ -53,12 +55,14 @@
 
             Console.Write("\n||現在 "); unit.SymbolRendering(); Console.WriteLine(unit.unitName + " が行動可能です。行動を選択してください。||");
 			Console.WriteLine("1.移動");
-			Console.Write("\n>> ");
 
-			input = Console.ReadLine();
-			selectedAction = int.Parse(input);
-
-			return selectedAction;
+			while (true)
+			{
+				Console.Write("\n>> ");
+				input = Console.ReadLine();
+				if (int.TryParse(input, out selectedAction))
+					return selectedAction;
+			}
         }
 
 		public int UnitMoveMenu()
@@ -70,12 +74,14 @@
 			Console.WriteLine("2.右");
 			Console.WriteLine("3.左");
 			Console.WriteLine("4.下");
-			Console.Write("\n>> ");
 
-			input = Console.ReadLine();
-			selectedDirection = int.Parse(input);
-
-			return selectedDirection;
+			while (true)
+			{
+				Console.Write("\n>> ");
+				input = Console.ReadLine();
+				if (int.TryParse(input, out selectedDirection))
+					return selectedDirection;
+			}
         }
 	}
 }

@@ -123,7 +123,12 @@
 
                         break;
 					}
-			}
+				default:
+					{
+						success = false;
+						break;
+                    }
+            }
 
 			return success;
 		}
