@@ -44,6 +44,7 @@
         public void UnitAction()
         {
             bool endActionSelect = false;        //行動選択終了フラグ
+            bool moveSelect = false;        //移動選択フラグ
 
             for (int i = 0; i < actionOrder.Count; ++i)
             {
