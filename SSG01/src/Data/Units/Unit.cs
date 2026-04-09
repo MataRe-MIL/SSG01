@@ -13,6 +13,7 @@
         public string unitName;     //ユニットの名前
 		public int team;        //0：プレイヤー陣営、1：敵陣営
 
+		public int attackRange = 2;		//ユニットの攻撃可能範囲
 		public int mobility = 20;        //ユニットの俊敏性
 
 		//=====ユニットの変数=====
@@ -131,6 +132,15 @@
             }
 
 			return success;
+		}
+
+		public bool Attack()
+		{
+			bool success = true;
+
+
+
+            return success;
 		}
 	}
 }

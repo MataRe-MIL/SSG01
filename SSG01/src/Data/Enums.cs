@@ -15,6 +15,6 @@
 
     public enum ActionType
     {
-        None = 0, Move
+        None = 0, Move, Attack
     }
 }

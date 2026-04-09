@@ -54,13 +54,15 @@
 			int selectedAction = 0;
 
             Console.Write("\n||現在 "); unit.SymbolRendering(); Console.WriteLine(unit.unitName + " が行動可能です。行動を選択してください。||");
+			Console.WriteLine("0.待機");
 			Console.WriteLine("1.移動");
+			Console.WriteLine("2.攻撃");
 
 			while (true)
 			{
 				Console.Write("\n>> ");
 				input = Console.ReadLine();
-				if (int.TryParse(input, out selectedAction))
+				if(int.TryParse(input, out selectedAction))
 					return selectedAction;
 			}
         }
@@ -83,5 +85,46 @@
 					return selectedDirection;
 			}
         }
+
+		public int UnitAttackMenu(Core.Operation operation, Data.Stages.Stage stage, Data.Units.Unit unit)
+		{
+			List<Data.Units.Unit> attackableUnits = operation.CheckMapTiles(unit.x, unit.y, unit.attackRange);
+			int counter = 1;
+			int selectAttackUnit;
+
+			Console.WriteLine("\n||攻撃対象を選択してください。||");
+			for(int i = 0; i < attackableUnits.Count; ++i)
+			{
+				if(attackableUnits[i].team == 0)
+				{
+					Console.Write(counter + "."); attackableUnits[i].SymbolRendering(); Console.WriteLine(attackableUnits[i].unitName);
+					++counter;
+				}
+			}
+
+
+			counter = 0;
+			while(true)
+			{
+				Console.Write(">> ");
+				input = Console.ReadLine();
+				if(int.TryParse(input, out selectAttackUnit))
+				{
+					for(int i = 0; i < attackableUnits.Count; ++i)
+					{
+						if(attackableUnits[i].team == 0)
+						{
+							++counter;
+							if(counter == selectAttackUnit)
+							{
+
+							}
+						}
+					}
+				}
+			}
+
+			return selectAttackUnit;
+		}
 	}
 }

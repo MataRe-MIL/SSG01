@@ -1,5 +1,7 @@
 ﻿namespace SSG01.Core
 {
+    using Microsoft.Win32.SafeHandles;
+    using SSG01.Data.Stages;
     using System;
     using System.Collections.Generic;
 
@@ -44,7 +46,6 @@
         public void UnitAction()
         {
             bool endActionSelect = false;        //行動選択終了フラグ
-            bool moveSelect = false;        //移動選択フラグ
 
             for (int i = 0; i < actionOrder.Count; ++i)
             {
@@ -72,6 +73,17 @@
                                             Console.WriteLine("その方向には移動できません。");
                                     }
                                     endActionSelect = true;
+                                    break;
+                                }
+                            case Data.Enums.ActionType.Attack:
+                                {
+                                    while(true)
+                                    {
+                                        if(actionOrder[i].Attack(menu.UnitAttackMenu(this, stage, actionOrder[i])))
+                                            break;
+                                        else
+                                            Console.WriteLine("そのタイルは攻撃できません。");
+                                    }
                                     break;
                                 }
                             default: break;
@@ -137,9 +149,9 @@
         //なお探索中心座標に指定されたマップタイルは探索対象から除外される。
         //x...探索中心のx座標、y...探索中心のy座標、distance...探索する距離
         //</summary>
-        public List<int[]> CheckMapTiles(int x, int y, int distance)
+        public List<Data.Units.Unit> CheckMapTiles(int x, int y, int distance)
         {
-            List<int[]> resultList = new List<int[]>();     //探索結果保存リスト
+            List<Data.Units.Unit> resultList = new List<Data.Units.Unit>();     //探索結果保存リスト
             
             for(int i = x - distance; i <= x + distance; ++i)
             {
@@ -150,7 +162,20 @@
                     if(i >= 0 && j >= 0 && i < stage.mapTiles.Length && j < stage.mapTiles[i].Length && i != x && j != y)       //マップタイルの範囲内で、探索中心座標以外のマップタイルを探索する
                     {
                         if (CheckMapTile(i, j)[1] == 1)
-                            resultList.Add(new int[] { i, j });
+                        {
+                            for(int k = 0; k < stage.setUnits.Length; ++k)
+                            {
+                                for(int l = 0; l < stage.setUnits[k].Count; ++l)
+                                {
+                                    if (stage.setUnits[k][l].x == i && stage.setUnits[k][l].y == j)
+                                    {
+                                        resultList.Add(stage.setUnits[k][l]);
+                                        goto One;
+                                    }
+                                }
+                            }
+                            One:;
+                        }
                     }
                 }
             }
