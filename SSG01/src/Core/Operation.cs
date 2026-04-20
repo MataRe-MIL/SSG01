@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Security.Cryptography;
 
     public class Operation
     {
@@ -64,7 +65,7 @@
                                 }
                             case Data.Enums.ActionType.Move:
                                 {
-                                    while (true)
+                                    while(true)
                                     {
                                         if(actionOrder[i].Move((Data.Enums.Direction)menu.UnitMoveMenu()) == true)
                                             break;
@@ -72,6 +73,15 @@
                                             Console.WriteLine("その方向には移動できません。");
                                     }
                                     endActionSelect = true;
+                                    break;
+                                }
+                            case Data.Enums.ActionType.Attack:
+                                {
+                                    while(true)
+                                    {
+
+                                    }
+
                                     break;
                                 }
                             default: break;
@@ -133,24 +143,21 @@
         }
 
         //<summary>
-        //ある座標を中心として指定した距離（マンハッタン距離）内のマップタイルの状態を確認する関数。
-        //なお探索中心座標に指定されたマップタイルは探索対象から除外される。
+        //ある座標を中心として指定した距離（マンハッタン距離）内のユニットをリストアップする関数。
+        //なお探索中心座標のユニットは探索対象から除外される。
         //x...探索中心のx座標、y...探索中心のy座標、distance...探索する距離
         //</summary>
-        public List<int[]> CheckMapTiles(int x, int y, int distance)
+        public List<Data.Units.Unit> SearchUnits(int x, int y, int distance)
         {
-            List<int[]> resultList = new List<int[]>();     //探索結果保存リスト
+            List<Data.Units.Unit> resultList = new List<Data.Units.Unit>();     //探索結果保存リスト
             
-            for(int i = x - distance; i <= x + distance; ++i)
+            for(int i = 0; i < stage.setUnits.Length; ++i)
             {
-                int remaining = distance - Math.Abs(i);     //探索中心からの距離を基に、探索するy座標の範囲を決定する
-
-                for(int j = y - remaining; j <= y + remaining; ++j)
+                for(int j = 0; j < stage.setUnits[i].Count; ++j)
                 {
-                    if(i >= 0 && j >= 0 && i < stage.mapTiles.Length && j < stage.mapTiles[i].Length && i != x && j != y)       //マップタイルの範囲内で、探索中心座標以外のマップタイルを探索する
+                    if (stage.setUnits[i][j].x != x && stage.setUnits[i][j].y != y && (Math.Abs(stage.setUnits[i][j].x - x) + Math.Abs(stage.setUnits[i][j].y - y)) <= distance)
                     {
-                        if (CheckMapTile(i, j)[1] == 1)
-                            resultList.Add(new int[] { i, j });
+                        resultList.Add(stage.setUnits[i][j]);
                     }
                 }
             }
