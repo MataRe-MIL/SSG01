@@ -48,7 +48,7 @@
                 {
 					if (units[i][j].x == checkX && units[i][j].y == checkY)
 					{
-						units[i][j].SymbolRendering(j);
+						units[i][j].symbolRendering(j);
 						goto EndLoop;
 					}
                 }

@@ -25,7 +25,7 @@
 			gamePhase = 1;
 
 
-			operation.StartOperation(nowStage);
+			operation.startOperation(nowStage);
         }
     }
 }

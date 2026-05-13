@@ -6,7 +6,8 @@
     public class Unit
 	{
         private Core.Operation operation;       //現在のマップインスタンスをロード
-		private static System.Random rand = new System.Random();        //乱数生成インスタンスをロード
+        private Core.Utilities util = new Core.Utilities();     //ユーティリティの起動
+        private static System.Random rand = new System.Random();        //乱数生成インスタンスをロード
 
         //=====ユニットの基本情報=====
         public bool playable;       //プレイヤーが操作可能なユニットかどうか
@@ -36,7 +37,7 @@
 
 
 		//マップ上シンボルの描画
-		public void SymbolRendering(int unitNum = 52)
+		public void symbolRendering(int unitNum = 52)
 		{
 			if (unitNum < 52)
 				symbolNum = unitNum;
@@ -71,9 +72,57 @@
 		}
 
 		//ユニットの行動順決定乱数生成
-		public void ActionRandom()
+		public void actionRandom()
 		{
             actionRandomValue = rand.Next(0, mobility);
+        }
+
+        public void unitAction(UI.Menu menu)
+        {
+            bool endActionSelect = false;        //行動選択終了フラグ
+            bool moveSelect = false;        //移動選択フラグ
+
+            if (playable == false)
+            {
+                Console.Write("アンプレイアブルの操作");
+            }
+            else
+            {
+                endActionSelect = false;       //行動選択終了フラグの初期化
+                while (endActionSelect == false)        //行動選択が正常に終了するまでループ
+                {
+                    switch((Data.Enums.ActionType)menu.UnitActionMenu(this))
+                    {
+                        case Data.Enums.ActionType.None:
+                            {
+                                endActionSelect = noneAction();
+                                break;
+                            }
+                        case Data.Enums.ActionType.Move:
+                            {
+                                while(true)
+                                {
+                                    if (move(menu) == true)
+                                    {
+                                        endActionSelect = true;
+                                        break;
+                                    }
+                                    else
+                                        Console.WriteLine("その方向には移動できません。");
+                                }
+                                break;
+                            }
+                        case Data.Enums.ActionType.Attack:
+                        default: break;
+                    }
+                }
+            }
+        }
+
+        private bool noneAction()
+        {
+            Console.WriteLine("待機します．");
+            return true;
         }
 
         //<summary>
@@ -81,56 +130,46 @@
         //移動方向に応じて、マップ上の移動先タイルが移動可能かどうかを判定し、移動可能な場合はユニットの座標を更新する。
         //direction...移動方向、nowTurn...現在のターン数
         //</summary>
-        public bool Move(Data.Enums.Direction direction)
-		{
-			bool success = true;
+        private bool move(UI.Menu menu)
+        {
+            int[] checkPosi = new int[2] {x, y};       //移動先タイルの座標を保管する．(x, y)で表される．
 
-            switch (direction)
-			{
-				case Enums.Direction.forward:
-					{
-						if(operation.CheckMapTile((x - 1), y)[0] == 1 && operation.CheckMapTile((x - 1), y)[1] == 0)
-							--x;
-						else
-							success = false;
-
+            switch((Data.Enums.Direction)menu.UnitMoveMenu())
+            {
+                case Enums.Direction.forward:
+                    {
+                        checkPosi[0] = x - 1;
                         break;
-					}
-				case Enums.Direction.backward:
-					{
-						if(operation.CheckMapTile((x + 1), y)[0] == 1 && operation.CheckMapTile((x + 1), y)[1] == 0)
-							++x;
-						else
-							success = false;
-
+                    }
+                case Enums.Direction.backward:
+                    {
+                        checkPosi[0] = x + 1;
                         break;
-					}
-				case Enums.Direction.right:
-					{
-						if(operation.CheckMapTile(x, (y + 1))[0] == 1 && operation.CheckMapTile(x, (y + 1))[1] == 0)
-							++y;
-						else
-							success = false;
-
+                    }
+                case Enums.Direction.right:
+                    {
+                        checkPosi[1] = y + 1;
                         break;
-					}
-				case Enums.Direction.left:
-					{
-						if(operation.CheckMapTile(x, (y - 1))[0] == 1 && operation.CheckMapTile(x, (y - 1))[1] == 0)
-							--y;
-						else
-							success = false;
-
+                    }
+                case Enums.Direction.left:
+                    {
+                        checkPosi[1] = y - 1;
                         break;
-					}
-				default:
-					{
-						success = false;
-						break;
+                    }
+                default:
+                    {
+                        return false;
                     }
             }
 
-			return success;
+            if(operation.checkMapTile(checkPosi[0], checkPosi[1])[0] == 1 && operation.checkMapTile(checkPosi[0], checkPosi[1])[1] == 0)
+            {
+                x = checkPosi[0];
+                y = checkPosi[1];
+                return true;
+            }
+            else
+                return false;
 		}
 	}
 }
