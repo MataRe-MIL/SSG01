@@ -14,24 +14,13 @@
 					{
 						case 0:
 							{
-								Console.ResetColor();       //色を初期状態に
-
-								if(units != null)
-									UnitRenderer(units,i,j);
-								else
-									Console.Write(" ");
+								noEntryZone(units, i, j);
 								break;
 							}
 						case 1:
 							{
-								Console.BackgroundColor = ConsoleColor.White;		//文字背景色を黄色に
-								Console.ForegroundColor = ConsoleColor.Black;       //文字色を黒色に
-								if (units != null)
-									UnitRenderer(units, i, j);
-								else
-									Console.Write(" ");
-								Console.ResetColor();
-								break;
+								passageway(units, i, j);
+                                break;
 							}
 						default:Console.Write("？"); break;
 					}
@@ -40,7 +29,28 @@
 			}
 		}
 
-		public void UnitRenderer(List<Data.Units.Unit>[] units, int checkX, int checkY)
+		private void noEntryZone(List<Data.Units.Unit>[] units, int i, int j)
+		{
+            Console.ResetColor();       //色を初期状態に
+
+            if (units != null)
+                UnitRenderer(units, i, j);
+            else
+                Console.Write(" ");
+        }
+		private void passageway(List<Data.Units.Unit>[] units, int i, int j)
+		{
+			Console.BackgroundColor = ConsoleColor.White;		//文字背景色を黄色に
+			Console.ForegroundColor = ConsoleColor.Black;       //文字色を黒色に
+			if (units != null)
+				UnitRenderer(units, i, j);
+			else
+				Console.Write(" ");
+			Console.ResetColor();
+        }
+
+
+        public void UnitRenderer(List<Data.Units.Unit>[] units, int checkX, int checkY)
 		{
 			for (int i = 0; i < units.Length; ++i)
 			{

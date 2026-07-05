@@ -134,42 +134,48 @@
         {
             int[] checkPosi = new int[2] {x, y};       //移動先タイルの座標を保管する．(x, y)で表される．
 
-            switch((Data.Enums.Direction)menu.UnitMoveMenu())
+            while (true)
             {
-                case Enums.Direction.forward:
-                    {
-                        checkPosi[0] = x - 1;
-                        break;
-                    }
-                case Enums.Direction.backward:
-                    {
-                        checkPosi[0] = x + 1;
-                        break;
-                    }
-                case Enums.Direction.right:
-                    {
-                        checkPosi[1] = y + 1;
-                        break;
-                    }
-                case Enums.Direction.left:
-                    {
-                        checkPosi[1] = y - 1;
-                        break;
-                    }
-                default:
-                    {
-                        return false;
-                    }
-            }
+                switch ((Data.Enums.Direction)menu.UnitMoveMenu())
+                {
+                    case Enums.Direction.forward:
+                        {
+                            checkPosi[0] = x - 1;
+                            break;
+                        }
+                    case Enums.Direction.backward:
+                        {
+                            checkPosi[0] = x + 1;
+                            break;
+                        }
+                    case Enums.Direction.right:
+                        {
+                            checkPosi[1] = y + 1;
+                            break;
+                        }
+                    case Enums.Direction.left:
+                        {
+                            checkPosi[1] = y - 1;
+                            break;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
 
-            if(operation.checkMapTile(checkPosi[0], checkPosi[1])[0] == 1 && operation.checkMapTile(checkPosi[0], checkPosi[1])[1] == 0)
-            {
-                x = checkPosi[0];
-                y = checkPosi[1];
-                return true;
+                if (operation.checkMapTile(checkPosi[0], checkPosi[1])[0] == 1 && operation.checkMapTile(checkPosi[0], checkPosi[1])[1] == 0)
+                {
+                    x = checkPosi[0];
+                    y = checkPosi[1];
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("その方向には移動できません。");
+                    return false;
+                }
             }
-            else
-                return false;
 		}
 	}
 }
