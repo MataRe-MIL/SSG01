@@ -4,6 +4,7 @@
     using SSG01.Data.Stages;
     using System;
     using System.Collections.Generic;
+    using System.Security.Cryptography;
 
     public class Operation
     {
@@ -26,7 +27,7 @@
         //オペレーションモードのメイン関数。オペレーション中の処理はこの関数を中心として処理される。
         //nowStage...現在のステージデータ
         //</summary>
-        public void StartOperation(Data.Stages.Stage nowStage)
+        public void startOperation(Data.Stages.Stage nowStage)
         {
             stage = nowStage;
 
@@ -37,71 +38,31 @@
                 ++turnCount;        //行動周回数の加算
                 Console.WriteLine(turnCount + "周目\n");
 
+                util.ConsoleClear();        //コンソールのクリア
                 mapRenderer.DrawMap(stage.mapTiles, stage.setUnits);        //マップの描画
-                DrawActionTurn();       //行動順の決定
-                UnitAction();       //ユニットの行動
+                drawActionTurn();       //行動順の決定
+                unitsAction();        //ユニットが行動順に沿って行動
             }
         }
 
-        public void UnitAction()
+
+        //==========UnitAction==========
+        private void unitsAction()
         {
-            bool endActionSelect = false;        //行動選択終了フラグ
-
-            for (int i = 0; i < actionOrder.Count; ++i)
+            for(int i = 0; i < actionOrder.Count; ++i)
             {
-                if (actionOrder[i].playable == false) continue;     //unplayableなユニットは行動させない（一時的な措置）
-                else
-                {
-                    endActionSelect = false;       //行動選択終了フラグの初期化
-                    while (endActionSelect == false)        //行動選択が正常に終了するまでループ
-                    {
-                        switch ((Data.Enums.ActionType)menu.UnitActionMenu(actionOrder[i]))
-                        {
-                            case Data.Enums.ActionType.None:
-                                {
-                                    Console.WriteLine("待機します");
-                                    endActionSelect = true;
-                                    break;
-                                }
-                            case Data.Enums.ActionType.Move:
-                                {
-                                    while (true)
-                                    {
-                                        if(actionOrder[i].Move((Data.Enums.Direction)menu.UnitMoveMenu()) == true)
-                                            break;
-                                        else
-                                            Console.WriteLine("その方向には移動できません。");
-                                    }
-                                    endActionSelect = true;
-                                    break;
-                                }
-                            case Data.Enums.ActionType.Attack:
-                                {
-                                    while(true)
-                                    {
-                                        if(actionOrder[i].Attack(menu.UnitAttackMenu(this, stage, actionOrder[i])))
-                                            break;
-                                        else
-                                            Console.WriteLine("そのタイルは攻撃できません。");
-                                    }
-                                    break;
-                                }
-                            default: break;
-                        }
-                    }
-                }
-
-                util.ConsoleClear();       //コンソールのクリア
-                mapRenderer.DrawMap(stage.mapTiles, stage.setUnits);
+                actionOrder[i].unitAction(menu);       //ユニットの行動
+                util.ConsoleClear();        //コンソールのクリア
+                mapRenderer.DrawMap(stage.mapTiles, stage.setUnits);        //マップの描画
             }
-            util.ConsoleClear();
         }
+
 
         //<summary>
         //マップ上のユニットの行動順を決定する関数。
         //ユニットの行動順は俊敏値を基にした乱数によって決定される。
         //</summary>
-        public void DrawActionTurn()
+        public void drawActionTurn()
         {
             actionOrder.Clear();        //行動順リストの初期化
 
@@ -109,7 +70,7 @@
             {
                 for(int j = 0; j < stage.setUnits[i].Count; ++j)
                 {
-                    stage.setUnits[i][j].ActionRandom();
+                    stage.setUnits[i][j].actionRandom();
                     actionOrder.Add(stage.setUnits[i][j]);
                 }
             }
@@ -122,65 +83,126 @@
         //x...マップタイルのx座標、y...マップタイルのy座標
         //返り値...{通行の可否(0,1), ユニットが存在するかどうか(0,1)}
         //</summary>
-        public int[] CheckMapTile(int x, int y)
+        public int[] checkMapTile(int x, int y)
         {
-            int[] result = new int[2];      //{通行の可否(0,1), ユニットが存在するかどうか(0,1)}
+            int[] result = new int[2];      //{通行の可否(1,0), ユニットが存在するかどうか(0,1)}
 
-            result[0] = stage.mapTiles[x][y];
-            result[1] = 0;
-            for (int i = 0; i < stage.setUnits.Length; ++i)
+            if (x < 0 || y < 0)
             {
-                for (int j = 0; j < stage.setUnits[i].Count; ++j)
+                result[0] = 0;
+                result[1] = 0;
+                return result;
+            }
+            else
+            {
+                result[0] = stage.mapTiles[x][y];
+                result[1] = 0;
+                for (int i = 0; i < stage.setUnits.Length; ++i)
                 {
-                    if (stage.setUnits[i][j].x == x && stage.setUnits[i][j].y == y)
+                    for (int j = 0; j < stage.setUnits[i].Count; ++j)
                     {
-                        result[1] = 1;
-                        goto EndTileCheckLoop;
+                        if (stage.setUnits[i][j].x == x && stage.setUnits[i][j].y == y)
+                        {
+                            result[1] = 1;
+                            goto EndTileCheckLoop;
+                        }
                     }
                 }
+                EndTileCheckLoop:;
             }
-            EndTileCheckLoop:
-
             return result;
         }
 
         //<summary>
-        //ある座標を中心として指定した距離（マンハッタン距離）内のマップタイルの状態を確認する関数。
-        //なお探索中心座標に指定されたマップタイルは探索対象から除外される。
+        //ある座標を中心として指定した距離（マンハッタン距離）内のユニットをリストアップする関数。
+        //なお探索中心座標のユニットは探索対象から除外される。
         //x...探索中心のx座標、y...探索中心のy座標、distance...探索する距離
         //</summary>
-        public List<Data.Units.Unit> CheckMapTiles(int x, int y, int distance)
+        public List<Data.Units.Unit> searchUnits(int x, int y, int distance)
         {
             List<Data.Units.Unit> resultList = new List<Data.Units.Unit>();     //探索結果保存リスト
             
-            for(int i = x - distance; i <= x + distance; ++i)
+            for(int i = 0; i < stage.setUnits.Length; ++i)
             {
-                int remaining = distance - Math.Abs(i);     //探索中心からの距離を基に、探索するy座標の範囲を決定する
-
-                for(int j = y - remaining; j <= y + remaining; ++j)
+                for(int j = 0; j < stage.setUnits[i].Count; ++j)
                 {
-                    if(i >= 0 && j >= 0 && i < stage.mapTiles.Length && j < stage.mapTiles[i].Length && i != x && j != y)       //マップタイルの範囲内で、探索中心座標以外のマップタイルを探索する
+                    if (stage.setUnits[i][j].x != x && stage.setUnits[i][j].y != y && (Math.Abs(stage.setUnits[i][j].x - x) + Math.Abs(stage.setUnits[i][j].y - y)) <= distance)
                     {
-                        if (CheckMapTile(i, j)[1] == 1)
-                        {
-                            for(int k = 0; k < stage.setUnits.Length; ++k)
-                            {
-                                for(int l = 0; l < stage.setUnits[k].Count; ++l)
-                                {
-                                    if (stage.setUnits[k][l].x == i && stage.setUnits[k][l].y == j)
-                                    {
-                                        resultList.Add(stage.setUnits[k][l]);
-                                        goto One;
-                                    }
-                                }
-                            }
-                            One:;
-                        }
+                        resultList.Add(stage.setUnits[i][j]);
                     }
                 }
             }
 
             return resultList;
+        }
+
+        //<summary>
+        //指定されたターゲット座標から各タイルまでの距離を計算する関数。
+        //マップのタイル情報とターゲット座標を入力として受け取り、距離マップを返す。
+        //</summary>
+        public int[][] createDistanceMap(int[][] mapTiles, int[] targetPosition)
+        {
+            int targetX = targetPosition[0];
+            int targetY = targetPosition[1];
+            int height = mapTiles.Length;
+            int width = mapTiles[0].Length;
+
+            //ターゲット座標がマップの範囲外である場合、例外をスローする
+            if (targetX < 0 || targetY < 0 || targetX >= height || targetY >= width)
+            {
+                throw new ArgumentException("ターゲット座標がマップの範囲外です。");
+            }
+
+
+            int[][] distanceMap = new int[height][];
+
+            for(int x =0; x < height; ++x)
+            {
+                distanceMap[x] = new int[width];
+
+                for(int y = 0; y < width; ++y)
+                {
+                    distanceMap[x][y] = -1;
+                }
+            }
+
+            distanceMap[targetX][targetY] = 0;     //ターゲット座標の距離を0に設定
+
+            //ターゲット座標のタイルが通行不可である場合は-1で埋められた距離マップを返す
+            if (mapTiles[targetX][targetY] == 0)
+            {
+                return distanceMap;
+            }
+
+            Queue<(int x, int y)> queue = new Queue<(int x, int y)>();
+            queue.Enqueue((targetX, targetY));
+
+            //上・下・左・右
+            int[] dx = { -1, 1, 0, 0 };
+            int[] dy = { 0, 0, -1, 1 };
+
+            while(queue.Count > 0)
+            {
+                (int currentX, int currentY) = queue.Dequeue();
+                int currentDistance = distanceMap[currentX][currentY];
+
+                for(int i = 0; i < 4; ++i)
+                {
+                    int nextX = currentX + dx[i];
+                    int nextY = currentY + dy[i];
+
+                    //マップの範囲外または通行不可能なタイルまたは既に探索済みである場合はスキップ
+                    if (nextX < 0 || nextY < 0 || nextX >= height || nextY >= width || mapTiles[nextX][nextY] == 0 || distanceMap[nextX][nextY] != -1)
+                    {
+                        continue;
+                    }
+
+                    distanceMap[nextX][nextY] = currentDistance + 1;
+                    queue.Enqueue((nextX, nextY));
+                }
+            }
+
+            return distanceMap;
         }
     }
 }

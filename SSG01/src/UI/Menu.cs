@@ -53,8 +53,7 @@
 		{
 			int selectedAction = 0;
 
-            Console.Write("\n||現在 "); unit.SymbolRendering(); Console.WriteLine(unit.unitName + " が行動可能です。行動を選択してください。||");
-			Console.WriteLine("0.待機");
+            Console.Write("\n||現在 "); unit.symbolRendering(); Console.WriteLine(unit.unitName + " が行動可能です。行動を選択してください。||");
 			Console.WriteLine("1.移動");
 			Console.WriteLine("2.攻撃");
 
@@ -86,45 +85,17 @@
 			}
         }
 
-		public int UnitAttackMenu(Core.Operation operation, Data.Stages.Stage stage, Data.Units.Unit unit)
+		public void AttackMenu(Core.Operation operation, Data.Units.Unit unit, int x, int y, int distance)
 		{
-			List<Data.Units.Unit> attackableUnits = operation.CheckMapTiles(unit.x, unit.y, unit.attackRange);
-			int counter = 1;
-			int selectAttackUnit;
-
-			Console.WriteLine("\n||攻撃対象を選択してください。||");
-			for(int i = 0; i < attackableUnits.Count; ++i)
+			List<Data.Units.Unit> targetUnits = operation.searchUnits(x, y, distance);
+			for(int i = 0; i < targetUnits.Count; ++i)
 			{
-				if(attackableUnits[i].team == 0)
-				{
-					Console.Write(counter + "."); attackableUnits[i].SymbolRendering(); Console.WriteLine(attackableUnits[i].unitName);
-					++counter;
-				}
+				if (targetUnits[i].team == 0)
+					targetUnits.Remove(targetUnits[i]);
 			}
 
+			Console.WriteLine("\n||現在"); unit.symbolRendering(); Console.Write("が行動可能です。攻撃する対象を選択してください。||");
 
-			counter = 0;
-			while(true)
-			{
-				Console.Write(">> ");
-				input = Console.ReadLine();
-				if(int.TryParse(input, out selectAttackUnit))
-				{
-					for(int i = 0; i < attackableUnits.Count; ++i)
-					{
-						if(attackableUnits[i].team == 0)
-						{
-							++counter;
-							if(counter == selectAttackUnit)
-							{
-
-							}
-						}
-					}
-				}
-			}
-
-			return selectAttackUnit;
 		}
 	}
 }
